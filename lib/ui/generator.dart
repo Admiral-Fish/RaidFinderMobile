@@ -222,15 +222,8 @@ class _GeneratorState extends State<Generator> {
 
   DataRow _getDataRow(Frame result) {
     var frame = result.frame.toString();
-
-    var ivs;
-    for (int i = 0; i < 6; i++) {
-      ivs += result.getIV(i).toString();
-      if (i != 5) {
-        ivs += '.';
-      }
-    }
-
+    var ivs =
+        '${result.getIV(0)}.${result.getIV(1)}.${result.getIV(2)}.${result.getIV(3)}.${result.getIV(4)}.${result.getIV(5)}';
     var shiny =
         result.shiny == 0 ? 'No' : result.shiny == 1 ? 'Star' : 'Square';
     var nature = Translator.getNature(result.nature);
