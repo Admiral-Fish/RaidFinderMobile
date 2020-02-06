@@ -10,8 +10,6 @@ import 'package:raidfinder/util/translator.dart';
 import 'package:raidfinder/ui/filters.dart';
 
 class Generator extends StatefulWidget {
-  static const String routeName = '/generator';
-
   @override
   _GeneratorState createState() => _GeneratorState();
 }
