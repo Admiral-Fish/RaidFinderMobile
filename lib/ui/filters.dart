@@ -68,6 +68,7 @@ class _FiltersState extends State<Filters> {
               ),
             ),
             body: ListView(
+              padding: EdgeInsets.all(12.0),
               children: <Widget>[
                 DropdownButtonFormField(
                     decoration: InputDecoration(labelText: 'HP'),
