@@ -1,0 +1,4 @@
+enum Game {
+  Sword,
+  Shield
+}

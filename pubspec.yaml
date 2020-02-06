@@ -1,0 +1,95 @@
+name: raidfinder
+description: RNG tool for Pokemon Sword/Shield raids
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  #shared_preferences: ^0.5.6+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/data/nests.json
+    - assets/data/personal_swsh
+    #- assets/text/abilities/abilities_de.txt
+    - assets/text/abilities/abilities_en.txt
+    #- assets/text/abilities/abilities_es.txt
+    #- assets/text/abilities/abilities_fr.txt
+    #- assets/text/abilities/abilities_it.txt
+    #- assets/text/abilities/abilities_ja.txt
+    #- assets/text/abilities/abilities_ko.txt
+    #- assets/text/abilities/abilities_tw.txt
+    #- assets/text/abilities/abilities_zh.txt
+    #- assets/text/characteristics/characteristics_de.txt
+    - assets/text/characteristics/characteristics_en.txt
+    #- assets/text/characteristics/characteristics_es.txt
+    #- assets/text/characteristics/characteristics_fr.txt
+    #- assets/text/characteristics/characteristics_it.txt
+    #- assets/text/characteristics/characteristics_ja.txt
+    #- assets/text/characteristics/characteristics_ko.txt
+    #- assets/text/characteristics/characteristics_tw.txt
+    #- assets/text/characteristics/characteristics_zh.txt
+    #- assets/text/locations/locations_de.txt
+    - assets/text/locations/locations_en.txt
+    #- assets/text/locations/locations_es.txt
+    #- assets/text/locations/locations_fr.txt
+    #- assets/text/locations/locations_it.txt
+    #- assets/text/locations/locations_ja.txt
+    #- assets/text/locations/locations_ko.txt
+    #- assets/text/locations/locations_tw.txt
+    #- assets/text/locations/locations_zh.txt
+    #- assets/text/natures/natures_de.txt
+    - assets/text/natures/natures_en.txt
+    #- assets/text/natures/natures_es.txt
+    #- assets/text/natures/natures_fr.txt
+    #- assets/text/natures/natures_it.txt
+    #- assets/text/natures/natures_ja.txt
+    #- assets/text/natures/natures_ko.txt
+    #- assets/text/natures/natures_tw.txt
+    #- assets/text/natures/natures_zh.txt
+    #- assets/text/species/species_de.txt
+    - assets/text/species/species_en.txt
+    #- assets/text/species/species_es.txt
+    #- assets/text/species/species_fr.txt
+    #- assets/text/species/species_it.txt
+    #- assets/text/species/species_ja.txt
+    #- assets/text/species/species_ko.txt
+    #- assets/text/species/species_tw.txt
+    #- assets/text/species/species_zh.txt
+
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #  - images/a_dot_burr.jpeg
+  #  - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
