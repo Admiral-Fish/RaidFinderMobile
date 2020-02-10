@@ -1,53 +1,81 @@
-matrix:
-  include:
-    - os: linux
-      language: android
-      licenses:
-        - 'android-sdk-preview-license-.+'
-        - 'android-sdk-license-.+'
-        - 'google-gdk-license-.+'
-      android:
-        components:
-          - tools
-          - platform-tools
-          - build-tools-25.0.3
-          - android-25
-          - sys-img-armeabi-v7a-google_apis-25
-          - extra-android-m2repository
-          - extra-google-m2repository
-          - extra-google-android-support
-      jdk: oraclejdk8
-      sudo: false
-      addons:
-        apt:
-          # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
-          sources:
-            - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-          packages:
-            - libstdc++6
-            - fonts-droid
-      before_script:
-        - wget http://services.gradle.org/distributions/gradle-3.5-bin.zip
-        - unzip -qq gradle-3.5-bin.zip
-        - export GRADLE_HOME=$PWD/gradle-3.5
-        - export PATH=$GRADLE_HOME/bin:$PATH
-        - git clone https://github.com/flutter/flutter.git -b alpha --depth 1
-      script:
-        - ./flutter/bin/flutter -v build apk
+os: linux
 
-    - os: osx
-      language: generic
-      osx_image: xcode8.3
-      before_script:
-        - pip install six
-        - brew update
-        - brew install --HEAD libimobiledevice
-        - brew install ideviceinstaller
-        - brew install ios-deploy
-        - git clone https://github.com/flutter/flutter.git -b alpha --depth 1
-      script:
-        - ./flutter/bin/flutter -v build ios --no-codesign
+# The Ubuntu Trusty release on Travis is known to
+# have oraclejdk8 available. For some reason, we couldn't
+# get this to work with other distributions/releases.
+dist: trusty
+jdk: oraclejdk8
+
+# We set language to Node.js (JavaScript) for the sake
+# of making creating utility scripts later on easier.
+language: node_js
+node_js:
+  - "12"
+
+env:
+  global:
+    - ANDROID_SDK_ROOT=/opt/android
+
+sudo: required
+
+addons:
+  apt:
+    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
+    sources:
+      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+    packages:
+      - lib32stdc++6 # https://github.com/flutter/flutter/issues/6207
+      - libstdc++6
+      - curl
+
+before_script:
+  # Setup gradle.
+  - wget https://services.gradle.org/distributions/gradle-4.10.3-bin.zip
+  - unzip -qq gradle-4.10.3-bin.zip
+  - export GRADLE_HOME=`pwd`/gradle-4.10.3
+  - export PATH=$GRADLE_HOME/bin:$PATH
+
+  # (Quick fix: Silence sdkmanager warning)
+  - mkdir -p /home/travis/.android
+  - echo 'count=0' > /home/travis/.android/repositories.cfg
+
+  # Download and setup Android SDK tools.
+  - wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+  - mkdir android-sdk-tools
+  - unzip -qq sdk-tools-linux-4333796.zip -d android-sdk-tools
+  - export PATH=`pwd`/android-sdk-tools/tools/bin:$PATH
+  - mkdir -p $ANDROID_SDK_ROOT
+  
+  # This will install the Android SDK 28 using the previously installed SDK tools.
+  - yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository" > /dev/null
+  - export PATH=${ANDROID_SDK_ROOT}/tools/bin:$PATH
+
+  # List sdkmanager packages
+  # (useful when checking the logs)
+  - sdkmanager --list
+
+  # Clone Flutter
+  # We clone the Flutter beta branch. You should clone whatever branch
+  # you know works for building production apps.
+  # If in doubt, you are advised to use the stable branch of Flutter
+  # for production apps and you would do this by changing -b beta to -b stable
+  # but we started the project before stable existed and whilst beta has always
+  # worked reasonably well for us and we find stable is usually too outdated
+  # and has too many missing framework features.
+  - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+  
+  # Add Flutter to the PATH environment variable.
+  - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+
+script:
+  # Prints the flutter version
+  # (allows you to ensure, for each build, that Flutter is set up correctly.)
+  - flutter doctor -v
+
+  # Run Flutter build
+  - ./flutter/bin/flutter build apk --split-per-abi
 
 cache:
   directories:
     - $HOME/.pub-cache
+    - node_modules
