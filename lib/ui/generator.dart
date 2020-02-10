@@ -35,13 +35,13 @@ class _GeneratorState extends State<Generator> {
 
   @override
   void initState() {
-    _rarities = <DropdownMenuItem<int>>[
+    _rarities = [
       DropdownMenuItem(value: 0, child: Text('Common')),
       DropdownMenuItem(value: 1, child: Text('Rare'))
     ];
     _rarityDropDownValue = _rarities[0].value;
 
-    _games = <DropdownMenuItem<Game>>[
+    _games = [
       DropdownMenuItem(value: Game.Sword, child: Text('Sword')),
       DropdownMenuItem(value: Game.Shield, child: Text('Shield'))
     ];
@@ -74,7 +74,7 @@ class _GeneratorState extends State<Generator> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('Raid Generator')),
-        body: ListView(padding: EdgeInsets.all(12.0), children: <Widget>[
+        body: ListView(padding: EdgeInsets.all(12.0), children: [
           TextField(
               controller: _seedController,
               decoration: InputDecoration(
@@ -92,7 +92,7 @@ class _GeneratorState extends State<Generator> {
               controller: _maxResultsController,
               decoration: InputDecoration(
                   border: OutlineInputBorder(), labelText: "Max Results")),
-          DropdownButtonFormField<int>(
+          DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Den'),
               isExpanded: true,
               value: _denDropDownValue,
@@ -102,7 +102,7 @@ class _GeneratorState extends State<Generator> {
                     _raids = _createRaidItems();
                     _raidsDropDownValue = _raids[0].value;
                   })),
-          DropdownButtonFormField<int>(
+          DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Raid'),
               isExpanded: true,
               value: _rarityDropDownValue,
@@ -112,7 +112,7 @@ class _GeneratorState extends State<Generator> {
                     _raids = _createRaidItems();
                     _raidsDropDownValue = _raids[0].value;
                   })),
-          DropdownButtonFormField<Game>(
+          DropdownButtonFormField(
             decoration: InputDecoration(labelText: 'Game'),
             isExpanded: true,
             value: _gamesDropDownValue,
@@ -123,7 +123,7 @@ class _GeneratorState extends State<Generator> {
               _raidsDropDownValue = _raids[0].value;
             }),
           ),
-          DropdownButtonFormField<int>(
+          DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Rarity'),
               isExpanded: true,
               value: _raidsDropDownValue,
@@ -190,7 +190,7 @@ class _GeneratorState extends State<Generator> {
 
     for (int i = 0; i < 100; i++) {
       var location = DenLoader.getLocation(i);
-      var name = '${i + 1}: ' + Translator.getLocation(location);
+      var name = '${i + 1}: ${Translator.getLocation(location)}';
 
       items.add(DropdownMenuItem(value: i, child: Text(name)));
     }
@@ -214,7 +214,7 @@ class _GeneratorState extends State<Generator> {
       string += raid.gigantamax ? ' | Giga' : '';
       string += ')';
 
-      items.add(DropdownMenuItem<int>(value: i, child: Text(string)));
+      items.add(DropdownMenuItem(value: i, child: Text(string)));
     }
 
     return items;
@@ -232,7 +232,7 @@ class _GeneratorState extends State<Generator> {
             Translator.getAbility(_info.getAbility(result.ability));
     var gender = result.gender == 0 ? '♂' : result.gender == 1 ? '♀' : '-';
 
-    return DataRow(cells: <DataCell>[
+    return DataRow(cells: [
       DataCell(Text(frame)),
       DataCell(Text(ivs)),
       DataCell(Text(shiny)),
