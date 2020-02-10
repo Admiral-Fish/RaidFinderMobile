@@ -23,6 +23,27 @@ script:
   - ./flutter/bin/flutter doctor -v
   - ./flutter/bin/flutter build apk --split-per-abi
 
+before_deploy:
+  - mv build/app/outputs/apk/release/app-armeabi-v7a-release.apk raidfinder-v7a.apk
+  - mv build/app/outputs/apk/release/app-arm64-v8a-release.apk raidfinder-v8a.apk
+  - mv build/app/outputs/apk/release/app-x86_64-release.apk raidfinder-x86_64.apk
+  - zip raidfinder-v7a.zip raidfinder-v7a.apk
+  - zip raidfinder-v8a.zip raidfinder-v8a.apk
+  - zip raidfinder-x86_64.zip raidfinder-x86_64.apk
+    
+deploy:
+  provider: releases
+  api_key:
+    secure: oO/VIxncW5tXdEhKFJfMJOzqY5Y7zZH4pJxwx+3xqrhGT3MvfHGeSyRK1oleO+uWK/13wXttB3XUBCrd5EvhDAwnNJEFqEDqs2XRR+Eybzb7LQCezXzEGR7TjDFzHBSCaNGRsiFinsRiqM0xXCQLgssazgj4OmTxsNe7cAuOQ7V0ugwM1H60heqKexCKivZlMkxkAUWm2boG4wNxLkYbtPmm3DbBdH0WPH5y/qvH9Zxd0xnt2RDCFl4HCs1rRKI4djUoaMILO3M+9SNd8rsXj9Pb70b0ssNEq4YcYUXWgtSSPuBGdT7BqR5jpjGDmhSGMTaJugl0LE+kpur0OMG/1w9NoyjBm0/9xuLNst6f4ZlVqpaGubfFTevz2gI4GQxagVEAGpVBLM9eq2kHgFUlxelY926an2Nz0OwZmySAok5hKvIKxHOcNMa62VwAjMyXpFq8BHkB50DQ0ZXtLYcGQDvi9ynwFbP9uTmznnsqNuhBxZ8WpIMXhqf+P9xf+VDgeeA+2NEwT6CnVHXm+DpJtZysvjZx59lhv33k9GjUuq58/xgkwBv4dC0jBgfiDpSfSjNKGyyXbJO+cbSX4oM58nMwXXQEUC1/EVtL7+yTUHtcIXZWE0kpegW+9V5nQt0nR8/Vhjpi+t56oaOKwmNBmSBl6U/tt+6gRLAD7cpU6eA=
+  file:
+    - "raidfinder-v7a.apk"
+    - "raidfinder-v8a.apk"
+    - "raidfinder-x86_64.apk"
+  skip_cleanup: true
+  on:
+    repo: Admiral-Fish/RaidFinderMobile
+    tags: true
+
 cache:
   directories:
     - $HOME/.pub-cache
