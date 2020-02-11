@@ -40,6 +40,8 @@ class _FiltersState extends State<Filters> {
 
   @override
   void initState() {
+    super.initState();
+
     _ivData = data.ivs;
     _shinyData = data.shiny;
     if (data.natures.every((bool value) => value)) {
@@ -51,8 +53,6 @@ class _FiltersState extends State<Filters> {
     }
     _abilityData = data.ability;
     _genderData = data.gender;
-
-    super.initState();
   }
 
   @override
@@ -74,7 +74,7 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'HP'),
                     isExpanded: true,
                     value: _ivData[0],
-                    items: <DropdownMenuItem<int>>[
+                    items: [
                       DropdownMenuItem(value: -1, child: Text('Any (0-31)')),
                       DropdownMenuItem(value: 0, child: Text('No Good (0)')),
                       DropdownMenuItem(value: 1, child: Text('Decent (1-15)')),
@@ -91,7 +91,7 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'Atk'),
                     isExpanded: true,
                     value: _ivData[1],
-                    items: <DropdownMenuItem<int>>[
+                    items: [
                       DropdownMenuItem(value: -1, child: Text('Any (0-31)')),
                       DropdownMenuItem(value: 0, child: Text('No Good (0)')),
                       DropdownMenuItem(value: 1, child: Text('Decent (1-15)')),
@@ -108,7 +108,7 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'Def'),
                     isExpanded: true,
                     value: _ivData[2],
-                    items: <DropdownMenuItem<int>>[
+                    items: [
                       DropdownMenuItem(value: -1, child: Text('Any (0-31)')),
                       DropdownMenuItem(value: 0, child: Text('No Good (0)')),
                       DropdownMenuItem(value: 1, child: Text('Decent (1-15)')),
@@ -125,7 +125,7 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'SpA'),
                     isExpanded: true,
                     value: _ivData[3],
-                    items: <DropdownMenuItem<int>>[
+                    items: [
                       DropdownMenuItem(value: -1, child: Text('Any (0-31)')),
                       DropdownMenuItem(value: 0, child: Text('No Good (0)')),
                       DropdownMenuItem(value: 1, child: Text('Decent (1-15)')),
@@ -142,7 +142,7 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'SpD'),
                     isExpanded: true,
                     value: _ivData[4],
-                    items: <DropdownMenuItem<int>>[
+                    items: [
                       DropdownMenuItem(value: -1, child: Text('Any (0-31)')),
                       DropdownMenuItem(value: 0, child: Text('No Good (0)')),
                       DropdownMenuItem(value: 1, child: Text('Decent (1-15)')),
@@ -159,7 +159,7 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'Spe'),
                     isExpanded: true,
                     value: _ivData[5],
-                    items: <DropdownMenuItem<int>>[
+                    items: [
                       DropdownMenuItem(value: -1, child: Text('Any (0-31)')),
                       DropdownMenuItem(value: 0, child: Text('No Good (0)')),
                       DropdownMenuItem(value: 1, child: Text('Decent (1-15)')),
@@ -176,7 +176,7 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'Shiny'),
                     isExpanded: true,
                     value: _shinyData,
-                    items: <DropdownMenuItem<int>>[
+                    items: [
                       DropdownMenuItem(value: -1, child: Text('Any')),
                       DropdownMenuItem(value: 1, child: Text('Star')),
                       DropdownMenuItem(value: 2, child: Text('Square')),
@@ -204,11 +204,11 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'Ability'),
                     isExpanded: true,
                     value: _abilityData,
-                    items: <DropdownMenuItem<int>>[
-                      DropdownMenuItem<int>(value: -1, child: Text('Any')),
-                      DropdownMenuItem<int>(value: 0, child: Text('1')),
-                      DropdownMenuItem<int>(value: 1, child: Text('2')),
-                      DropdownMenuItem<int>(value: 2, child: Text('HA')),
+                    items: [
+                      DropdownMenuItem(value: -1, child: Text('Any')),
+                      DropdownMenuItem(value: 0, child: Text('1')),
+                      DropdownMenuItem(value: 1, child: Text('2')),
+                      DropdownMenuItem(value: 2, child: Text('HA')),
                     ],
                     onChanged: (int value) {
                       setState(() => _abilityData = value);
@@ -218,10 +218,10 @@ class _FiltersState extends State<Filters> {
                     decoration: InputDecoration(labelText: 'Gender'),
                     isExpanded: true,
                     value: _genderData,
-                    items: <DropdownMenuItem<int>>[
-                      DropdownMenuItem<int>(value: -1, child: Text('Any')),
-                      DropdownMenuItem<int>(value: 0, child: Text('♂')),
-                      DropdownMenuItem<int>(value: 1, child: Text('♀'))
+                    items: [
+                      DropdownMenuItem(value: -1, child: Text('Any')),
+                      DropdownMenuItem(value: 0, child: Text('♂')),
+                      DropdownMenuItem(value: 1, child: Text('♀'))
                     ],
                     onChanged: (int value) {
                       setState(() => _genderData = value);

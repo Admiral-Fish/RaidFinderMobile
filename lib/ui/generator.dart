@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:raidfinder/results/personal_info.dart';
 import 'package:raidfinder/generator/raid_generator.dart';
 import 'package:raidfinder/filter/frame_filter.dart';
@@ -8,6 +9,7 @@ import 'package:raidfinder/util/game.dart';
 import 'package:raidfinder/results/frame.dart';
 import 'package:raidfinder/util/translator.dart';
 import 'package:raidfinder/ui/filters.dart';
+import 'package:raidfinder/util/settings.dart';
 
 class Generator extends StatefulWidget {
   @override
@@ -35,39 +37,43 @@ class _GeneratorState extends State<Generator> {
 
   @override
   void initState() {
+    super.initState();
+
     _rarities = [
       DropdownMenuItem(value: 0, child: Text('Common')),
       DropdownMenuItem(value: 1, child: Text('Rare'))
     ];
-    _rarityDropDownValue = _rarities[0].value;
+    _rarityDropDownValue = Settings.getInt('rarity') ?? 0;
 
     _games = [
       DropdownMenuItem(value: Game.Sword, child: Text('Sword')),
       DropdownMenuItem(value: Game.Shield, child: Text('Shield'))
     ];
-    _gamesDropDownValue = _games[0].value;
-
-    _dens = _createDenItems();
-    _denDropDownValue = _dens[0].value;
-
-    _raids = _createRaidItems();
-    _raidsDropDownValue = _raids[0].value;
+    _gamesDropDownValue = Game.values[Settings.getInt('game') ?? 0];
 
     _seedController = TextEditingController();
-    _initialFrameController = TextEditingController(text: '1');
-    _maxResultsController = TextEditingController(text: '100');
+    _seedController.text = Settings.getString('seed') ?? "0";
+
+    _initialFrameController = TextEditingController();
+    _initialFrameController.text = Settings.getString('initialFrame') ?? '1';
+
+    _maxResultsController = TextEditingController();
+    _maxResultsController.text = Settings.getString('maxResults') ?? '100';
+
+    _denDropDownValue = Settings.getInt('den') ?? 0;
+    _raidsDropDownValue = Settings.getInt('raid') ?? 0;
+    _dens = _createDenItems();
+    _raids = _createRaidItems();
 
     _frames = List<Frame>();
 
     _data = FilterData(
-        ivs: List<int>.filled(6, -1),
-        natures: List<bool>.filled(25, true),
+        ivs: List.filled(6, -1),
+        natures: List.filled(25, true),
         gender: -1,
         ability: -1,
         shiny: -1,
         skip: false);
-
-    super.initState();
   }
 
   @override
@@ -78,58 +84,82 @@ class _GeneratorState extends State<Generator> {
           TextField(
               controller: _seedController,
               decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Seed")),
+                  border: OutlineInputBorder(), labelText: "Seed"),
+              inputFormatters: [
+                WhitelistingTextInputFormatter(RegExp("[0-9a-fA-F]"))
+              ],
+              onChanged: (text) => Settings.setValue('seed', text)),
           Divider(color: Colors.transparent),
           TextField(
-            controller: _initialFrameController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Initial Frame",
-            ),
-          ),
+              controller: _initialFrameController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Initial Frame",
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (text) => Settings.setValue('initialFrame', text)),
           Divider(color: Colors.transparent),
           TextField(
               controller: _maxResultsController,
               decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Max Results")),
+                  border: OutlineInputBorder(), labelText: "Max Results"),
+              keyboardType: TextInputType.number,
+              onChanged: (text) => Settings.setValue('maxResults', text)),
           DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Den'),
               isExpanded: true,
               value: _denDropDownValue,
               items: _dens,
-              onChanged: (int value) => setState(() {
-                    _denDropDownValue = value;
-                    _raids = _createRaidItems();
-                    _raidsDropDownValue = _raids[0].value;
-                  })),
+              onChanged: (int value) {
+                setState(() {
+                  _denDropDownValue = value;
+                  _raids = _createRaidItems();
+                  _raidsDropDownValue = _raids[0].value;
+                });
+
+                Settings.setValue('den', _denDropDownValue);
+                Settings.setValue('raid', _raidsDropDownValue);
+              }),
           DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Raid'),
               isExpanded: true,
               value: _rarityDropDownValue,
               items: _rarities,
-              onChanged: (int value) => setState(() {
-                    _rarityDropDownValue = value;
-                    _raids = _createRaidItems();
-                    _raidsDropDownValue = _raids[0].value;
-                  })),
+              onChanged: (int value) {
+                setState(() {
+                  _rarityDropDownValue = value;
+                  _raids = _createRaidItems();
+                  _raidsDropDownValue = _raids[0].value;
+                });
+
+                Settings.setValue('raid', _raidsDropDownValue);
+              }),
           DropdownButtonFormField(
             decoration: InputDecoration(labelText: 'Game'),
             isExpanded: true,
             value: _gamesDropDownValue,
             items: _games,
-            onChanged: (Game value) => setState(() {
-              _gamesDropDownValue = value;
-              _raids = _createRaidItems();
-              _raidsDropDownValue = _raids[0].value;
-            }),
+            onChanged: (Game value) {
+              setState(() {
+                _gamesDropDownValue = value;
+                _raids = _createRaidItems();
+                _raidsDropDownValue = _raids[0].value;
+              });
+
+              Settings.setValue(
+                  'game', Game.values.indexOf(_gamesDropDownValue));
+              Settings.setValue('raid', _raidsDropDownValue);
+            },
           ),
           DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Rarity'),
               isExpanded: true,
               value: _raidsDropDownValue,
               items: _raids,
-              onChanged: (int value) =>
-                  setState(() => _raidsDropDownValue = value)),
+              onChanged: (int value) {
+                setState(() => _raidsDropDownValue = value);
+                Settings.setValue('rarity', _raidsDropDownValue);
+              }),
           RaisedButton(child: Text('Generate'), onPressed: () => _generate()),
           RaisedButton(
               child: Text('Filters'),

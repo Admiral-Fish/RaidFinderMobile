@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:raidfinder/util/settings.dart';
 
 class Translator {
   static List<String> _abilities;
@@ -7,7 +8,9 @@ class Translator {
   static List<String> _natures;
   static List<String> _species;
 
-  static Future<void> init(String locale) async {
+  static Future<void> init() async {
+    String locale = Settings.getString('locale') ?? 'en';
+
     List<Future<List<String>>> futures = [
       _readFile("assets/text/abilities/abilities_" + locale + ".txt").then((value) => _abilities = value),
       _readFile(
