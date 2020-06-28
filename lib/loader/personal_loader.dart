@@ -8,7 +8,7 @@ class PersonalLoader {
   static Future<void> init() async {
     final data = await rootBundle.load('assets/data/personal_swsh');
 
-    for (int i = 0; i < data.lengthInBytes; i += 168) {
+    for (int i = 0; i < data.lengthInBytes; i += 176) {
       List<int> stats = [
         data.getUint8(i),
         data.getUint8(i + 1),

@@ -17,6 +17,8 @@ class Generator extends StatefulWidget {
 }
 
 class _GeneratorState extends State<Generator> {
+  int _locationDropDownValue;
+  List<DropdownMenuItem<int>> _locations;
   int _denDropDownValue;
   List<DropdownMenuItem<int>> _dens;
   int _rarityDropDownValue;
@@ -43,7 +45,7 @@ class _GeneratorState extends State<Generator> {
       DropdownMenuItem(value: 0, child: Text('Common')),
       DropdownMenuItem(value: 1, child: Text('Rare'))
     ];
-    _rarityDropDownValue = Settings.getInt('rarity') ?? 0;
+    _rarityDropDownValue = 0;
 
     _games = [
       DropdownMenuItem(value: Game.Sword, child: Text('Sword')),
@@ -60,8 +62,14 @@ class _GeneratorState extends State<Generator> {
     _maxResultsController = TextEditingController();
     _maxResultsController.text = Settings.getString('maxResults') ?? '100';
 
-    _denDropDownValue = Settings.getInt('den') ?? 0;
-    _raidsDropDownValue = Settings.getInt('raid') ?? 0;
+    _locations = [
+      DropdownMenuItem(value: 0, child: Text('Wild Area')),
+      DropdownMenuItem(value: 1, child: Text('Isle of Armor'))
+    ];
+    _locationDropDownValue = 0;
+
+    _denDropDownValue = 0;
+    _raidsDropDownValue = 0;
     _dens = _createDenItems();
     _raids = _createRaidItems();
 
@@ -105,6 +113,21 @@ class _GeneratorState extends State<Generator> {
                   border: OutlineInputBorder(), labelText: "Max Results"),
               keyboardType: TextInputType.number,
               onChanged: (text) => Settings.setValue('maxResults', text)),
+          DropdownButtonFormField(
+            decoration: InputDecoration(labelText: 'Location'),
+            isExpanded: true,
+            value: _locationDropDownValue,
+            items: _locations,
+            onChanged: (int value){
+              setState(() {
+                _locationDropDownValue = value;
+                _dens = _createDenItems();
+                _denDropDownValue = _dens[0].value;
+                _raids = _createRaidItems();
+                _raidsDropDownValue = _raids[0].value;
+              });
+            },
+          ),
           DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Den'),
               isExpanded: true,
@@ -218,9 +241,13 @@ class _GeneratorState extends State<Generator> {
   List<DropdownMenuItem<int>> _createDenItems() {
     var items = List<DropdownMenuItem<int>>();
 
-    for (int i = 0; i < 100; i++) {
+    int start = _locationDropDownValue == 0 ? 0 : 100;
+    int end = _locationDropDownValue == 0 ? 100 : 190;
+    int offset = _locationDropDownValue == 0 ? 0 : 100;
+
+    for (int i = start; i < end; i++) {
       var location = DenLoader.getLocation(i);
-      var name = '${i + 1}: ${Translator.getLocation(location)}';
+      var name = '${i + 1 - offset}: ${Translator.getLocation(location)}';
 
       items.add(DropdownMenuItem(value: i, child: Text(name)));
     }
@@ -258,7 +285,7 @@ class _GeneratorState extends State<Generator> {
         result.shiny == 0 ? 'No' : result.shiny == 1 ? 'Star' : 'Square';
     var nature = Translator.getNature(result.nature);
     var ability =
-        (result.ability == 2 ? 'HA: ' : (result.ability.toString() + ' ')) +
+        (result.ability == 2 ? 'HA: ' : (result.ability + 1).toString() + ': ') +
             Translator.getAbility(_info.getAbility(result.ability));
     var gender = result.gender == 0 ? '♂' : result.gender == 1 ? '♀' : '-';
 
